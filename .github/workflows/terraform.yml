@@ -5,7 +5,6 @@ on:
     paths:
     - '**'
     - '.github/workflows/terraform.yml'
-  workflow_dispatch:
   pull_request:
     paths:
     - '**'
@@ -15,125 +14,9 @@ permissions: write-all
 
 jobs:
   terraform:
-    runs-on: ubuntu-latest
-    concurrency: terraform
-    services:
-      op-connect-api:
-        image: 1password/connect-api:latest
-        ports:
-          - 8080:8080
-        volumes:
-          - op-data:/home/opuser/.op/data
-        env:
-          OP_SESSION: ${{ secrets.OP_CREDENTIALS_B64 }}
-      op-connect-sync:
-        image: 1password/connect-sync:latest
-        ports:
-          - 8081:8080
-        volumes:
-          - op-data:/home/opuser/.op/data
-        env:
-          OP_SESSION: ${{ secrets.OP_CREDENTIALS_B64 }}
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Configure 1Password Connect
-      uses: 1password/load-secrets-action/configure@v1
-      with:
-        connect-host: http://localhost:8080
-        connect-token: ${{ secrets.OP_CONNECT_TOKEN }}
-    
-    # - name: Load Tailscale Secrets
-    #   uses: 1password/load-secrets-action@v1.0.1
-    #   env:
-    #     TAILSCALE_AUTHKEY: op://jtcressy-net-infra/tailscale/ephemeral/credential
-
-    # - name: Tailscale
-    #   uses: tailscale/github-action@effa99fe9dc68518c77d0e7c00879f6599714d39
-    #   with:
-    #     authkey: ${{ env.TAILSCALE_AUTHKEY }}
-    #     args: "--advertise-tags=tag:ghactions"
-
-    - name: Set up gcloud Cloud SDK environment
-      uses: google-github-actions/setup-gcloud@v0.2.0
-      with:
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
-        service_account_key: ${{ secrets.GCP_SA_KEY }}
-        export_default_credentials: true
-
-    - name: Query .terraform-version
-      id: terraform-version
-      uses: juliangruber/read-file-action@v1
-      with:
-        path: .terraform-version
-
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        terraform_version: ${{ steps.terraform-version.outputs.content }}
-
-    - name: Terraform Format
-      id: fmt
-      run: terraform fmt -check
-      continue-on-error: true
-
-    - name: Terraform Init
-      id: init
-      run: terraform init -no-color -input=false
-    
-    - name: Terraform Validate
-      id: validate
-      run: terraform validate -no-color
-
-    - name: Terraform Plan
-      id: plan
-      run: terraform version && terraform plan -no-color -input=false
-      continue-on-error: true
-
-    - name: Update Pull Request
-      id: update-pull-request
-      uses: actions-cool/maintain-one-comment@v2
-      if: always() && github.event_name == 'pull_request'
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        body: |
-          #### Terraform Format and Style 🖌`${{ steps.fmt.outcome }}`
-          #### Terraform Initialization ⚙️`${{ steps.init.outcome }}`
-          #### Terraform Validation 🤖`${{ steps.validate.outcome }}`
-          ```
-          ${{ steps.validate.outputs.stdout }}
-          ${{ steps.validate.outputs.stderr }}
-          ```
-          #### Terraform Plan 📖`${{ steps.plan.outcome }}`
-          
-          <details><summary>Show Plan</summary>
-          
-          ```
-          ${{ steps.plan.outputs.stdout }}
-          ${{ steps.plan.outputs.stderr }}
-          ```
-          
-          </details>
-          
-          *Pusher: @${{ github.actor }}, Action: `${{ github.event_name }}`, Workflow: `${{ github.workflow }}`*
-          <!-- created by terraform/update-pull-request -->
-        emojis: ''
-        body-include: '<!-- created by terraform/update-pull-request -->'
-    
-    - name: Terraform Plan Status
-      if: steps.plan.outcome == 'failure'
-      run: exit 1
-    
-    - name: Terraform Apply
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      run: terraform apply -auto-approve -input=false
-
-    - name: Dump docker service logs
-      if: always()
-      run: |
-        docker ps -a
-        echo "--- op-connect-sync ---"
-        docker logs ${{ job.services.op-connect-sync.id }}
-        echo "--- op-connect-api ---"
-        docker logs ${{ job.services.op-connect-api.id }}
+    uses: jtcressy-home/actions-workflows/.github/workflows/terraform.yml@main
+    with:
+      tailscale: false
+      action: ${{ (github.event.ref == 'refs/heads/main' && 'apply -auto-approve') || 'plan' }}
+      debug: ${{ github.event.inputs.debug || false }}
+    secrets: inherit
