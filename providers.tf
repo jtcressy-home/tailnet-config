@@ -13,5 +13,5 @@ data "onepassword_item" "tailscale-api" {
 
 provider "tailscale" {
   api_key = data.onepassword_item.tailscale-api.password
-  tailnet = "jtcressy-home.org.github"
+  tailnet = data.onepassword_item.tailscale-api.username
 }
