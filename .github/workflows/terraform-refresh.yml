@@ -1,0 +1,32 @@
+name: Terraform Auto-Refresh
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6,18 * * *"
+
+permissions: write-all
+
+jobs:
+  terraform:
+    uses: jtcressy-home/actions-workflows/.github/workflows/terraform.yml@main
+    with:
+      tailscale: false
+      action: plan -refresh-only
+      debug: ${{ github.event.inputs.debug || false }}
+    secrets: inherit
+  terraform-has-changes:
+    runs-on: ubuntu-latest
+    needs:
+    - terraform
+    steps:
+    - uses: actions/checkout@v2
+    - name: Create/Update Issue
+      id: create-issue
+      if: needs.terraform.outputs.plan-has-changes == 'true'
+      uses: JasonEtco/create-an-issue@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PLAN_OUTPUT: ${{ needs.terraform.outputs.plan-output }}
+      with:
+        filename: .github/config-drift-issue.md
+        update_existing: true
