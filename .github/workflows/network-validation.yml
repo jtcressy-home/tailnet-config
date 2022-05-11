@@ -23,6 +23,7 @@ jobs:
         env:
           OP_SESSION: ${{ secrets.OP_CREDENTIALS_B64 }}
     steps:
+    - uses: actions/checkout@v2
     - name: Configure 1Password Connect
       uses: 1password/load-secrets-action/configure@v1
       with:
