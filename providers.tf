@@ -15,3 +15,5 @@ provider "tailscale" {
   api_key = data.onepassword_item.tailscale-api.password
   tailnet = data.onepassword_item.tailscale-api.username
 }
+
+provider "vault" {}
