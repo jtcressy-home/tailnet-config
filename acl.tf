@@ -1,7 +1,7 @@
 resource "tailscale_acl" "main" {
   acl = jsonencode({
     Groups : {
-      "group:admins": ["jtcressy@github","keatontaylor@github"]
+      "group:admins" : ["jtcressy@github", "keatontaylor@github"]
     }
     acls : [
       {
@@ -12,7 +12,8 @@ resource "tailscale_acl" "main" {
       }
     ]
     tagOwners : {
-      "tag:ghactions": ["group:admins"]
+      "tag:ghactions" : ["group:admins"]
+      "tag:homeudm" : ["group:admins"]
     }
   })
 }
