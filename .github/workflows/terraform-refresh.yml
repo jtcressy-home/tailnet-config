@@ -10,6 +10,7 @@ jobs:
   terraform:
     uses: jtcressy-home/actions-workflows/.github/workflows/terraform.yml@main
     with:
+      vault: https://vault.jtcressy.net
       tailscale: false
       action: plan -refresh-only
       debug: ${{ github.event.inputs.debug || false }}
