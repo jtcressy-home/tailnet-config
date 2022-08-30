@@ -1,6 +1,15 @@
+resource "time_rotating" "tskey" {
+  rotation_days = 30
+}
+
 resource "tailscale_tailnet_key" "reusable" {
   reusable  = true
   ephemeral = false
+
+  lifecycle {
+
+    replace_triggered_by = [time_rotating.tskey]
+  }
 }
 
 resource "onepassword_item" "tailscale-key-reusable" {
@@ -21,6 +30,10 @@ resource "tailscale_tailnet_key" "ghactions" {
     "tag:ghactions"
   ]
   depends_on = [tailscale_acl.main]
+
+  lifecycle {
+    replace_triggered_by = [time_rotating.tskey]
+  }
 }
 
 resource "onepassword_item" "tailscale-key-ghactions" {
@@ -39,6 +52,10 @@ resource "tailscale_tailnet_key" "home-udm" {
   ephemeral  = false
   tags       = ["tag:homeudm"]
   depends_on = [tailscale_acl.main]
+
+  lifecycle {
+    replace_triggered_by = [time_rotating.tskey]
+  }
 }
 
 resource "vault_generic_secret" "home-udm_ts-key" {
