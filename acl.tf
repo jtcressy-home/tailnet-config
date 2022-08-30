@@ -14,6 +14,15 @@ resource "tailscale_acl" "main" {
     tagOwners : {
       "tag:ghactions" : ["group:admins"]
       "tag:homeudm" : ["group:admins"]
+      "tag:codespaces" : ["group:admins"]
     }
+    ssh : [
+      {
+        action : "check"
+        src : ["autogroup:members"]
+        dst : ["autogroup:self"]
+        users : ["autogroup:nonroot", "root"]
+      }
+    ]
   })
 }
