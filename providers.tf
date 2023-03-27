@@ -6,14 +6,14 @@ data "onepassword_vault" "jtcressy-net-infra" {
   name = "jtcressy-net-infra"
 }
 
-data "onepassword_item" "tailscale-api" {
-  vault = data.onepassword_vault.jtcressy-net-infra.uuid
-  title = "tailscale-api"
+provider "vault" {}
+
+data "vault_generic_secret" "tailscale" {
+  path = "generic/tailscale"
 }
 
 provider "tailscale" {
-  api_key = data.onepassword_item.tailscale-api.password
-  tailnet = data.onepassword_item.tailscale-api.username
+  api_key = data.vault_generic_secret.tailscale.api_key
+  tailnet = data.vault_generic_secret.tailscale.tailnet
 }
 
-provider "vault" {}
