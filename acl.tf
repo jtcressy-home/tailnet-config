@@ -25,9 +25,9 @@ resource "tailscale_acl" "main" {
       "tag:ghactions" : ["group:admins"]
       "tag:homeudm" : ["group:admins"]
       "tag:codespaces" : ["group:admins"]
-      "tag:edgenode": ["group:admins"]
-      "tag:k8s-operator": []
-      "tag:k8s": ["tag:k8s-operator"]
+      "tag:edgenode" : ["group:admins"]
+      "tag:k8s-operator" : []
+      "tag:k8s" : ["tag:k8s-operator"]
     }
     ssh : [
       {

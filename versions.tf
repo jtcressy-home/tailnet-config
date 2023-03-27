@@ -13,7 +13,7 @@ terraform {
       version = "4.24.1"
     }
     vault = {
-      source = "hashicorp/vault"
+      source  = "hashicorp/vault"
       version = "3.14.0"
     }
   }
