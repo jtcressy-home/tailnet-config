@@ -8,12 +8,13 @@ data "onepassword_vault" "jtcressy-net-infra" {
 
 provider "vault" {}
 
-data "vault_generic_secret" "tailscale" {
-  path = "generic/tailscale"
+data "vault_kv_secret_v2" "tailscale" {
+  mount = "generic"
+  name  = "tailscale"
 }
 
 provider "tailscale" {
-  api_key = data.vault_generic_secret.tailscale.data["api_key"]
-  tailnet = data.vault_generic_secret.tailscale.data["tailnet"]
+  api_key = data.vault_kv_secret_v2.tailscale.data["api_key"]
+  tailnet = data.vault_kv_secret_v2.tailscale.data["tailnet"]
 }
 
