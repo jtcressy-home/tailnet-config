@@ -1,0 +1,16 @@
+name: Terraform (main)
+on:
+  push:
+    branches: [ main ]
+
+permissions: write-all
+
+jobs:
+  terraform:
+    uses: jtcressy-home/actions-workflows/.github/workflows/terraform.yml@main
+    with:
+      vault: https://vault.jtcressy.net/
+      tailscale: false
+      action: apply
+      debug: ${{ github.event.inputs.debug == 'true' }}
+    secrets: inherit

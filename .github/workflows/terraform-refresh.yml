@@ -12,7 +12,8 @@ jobs:
     with:
       vault: https://vault.jtcressy.net
       tailscale: false
-      action: plan -refresh-only
+      action: plan
+      arguments: -refresh-only
       debug: ${{ github.event.inputs.debug || false }}
     secrets: inherit
   terraform-has-changes:
