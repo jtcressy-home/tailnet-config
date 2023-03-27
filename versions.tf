@@ -5,8 +5,8 @@ terraform {
       version = "1.1.4"
     }
     tailscale = {
-      source  = "davidsbond/tailscale"
-      version = "0.12.2"
+      source  = "tailscale/tailscale"
+      version = "0.13.6"
     }
     github = {
       source  = "integrations/github"
