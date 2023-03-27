@@ -12,6 +12,10 @@ terraform {
       source  = "integrations/github"
       version = "4.24.1"
     }
+    vault = {
+      source = "hashicorp/vault"
+      version = "3.14.0"
+    }
   }
   required_version = ">=1.0"
 }

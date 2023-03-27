@@ -13,7 +13,7 @@ data "vault_generic_secret" "tailscale" {
 }
 
 provider "tailscale" {
-  api_key = data.vault_generic_secret.tailscale.api_key
-  tailnet = data.vault_generic_secret.tailscale.tailnet
+  api_key = data.vault_generic_secret.tailscale.data["api_key"]
+  tailnet = data.vault_generic_secret.tailscale.data["tailnet"]
 }
 
