@@ -15,7 +15,7 @@ resource "onepassword_item" "tailscale-key-reusable" {
   vault    = data.onepassword_vault.jtcressy-net-infra.uuid
   title    = "tailscale-key-reusable"
   category = "login"
-  username = data.vault_generic_secret.tailscale.tailnet
+  username = data.vault_generic_secret.tailscale.data["tailnet"]
   password = tailscale_tailnet_key.reusable.key
   tags = [
     "ManagedByTerraform"
@@ -39,7 +39,7 @@ resource "onepassword_item" "tailscale-key-ghactions" {
   vault    = data.onepassword_vault.jtcressy-net-infra.uuid
   title    = "tailscale-key-ghactions"
   category = "login"
-  username = data.vault_generic_secret.tailscale.tailnet
+  username = data.vault_generic_secret.tailscale.data["tailnet"]
   password = tailscale_tailnet_key.ghactions.key
   tags = [
     "ManagedByTerraform"
