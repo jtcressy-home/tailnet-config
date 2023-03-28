@@ -1,5 +1,5 @@
-resource "tailscale_acl" "main" {
-  acl = jsonencode({
+locals {
+  tailscale_acl = jsonencode({
     Groups : {
       "group:admins" : ["jtcressy@github", "keatontaylor@github", "ajwhiteh@github"]
     }
@@ -44,4 +44,11 @@ resource "tailscale_acl" "main" {
       }
     ]
   })
+}
+
+resource "tailscale_acl" "main" {
+  acl = <<EOF
+// This tailnet's ACLs are maintained in https://github.com/jtcressy-home/tailnet-config
+${local.tailscale_acl}
+EOF
 }
