@@ -35,6 +35,12 @@ resource "tailscale_acl" "main" {
         src : ["autogroup:members"]
         dst : ["autogroup:self"]
         users : ["autogroup:nonroot", "root"]
+      },
+      {
+        action : "allow"
+        src : ["group:admins", "tag:ghactions"]
+        dst : ["tag:homeudm", "tag:edgenode"]
+        users : ["autogroup:nonroot", "root"]
       }
     ]
   })
