@@ -28,6 +28,9 @@ locals {
       "tag:edgenode" : ["group:admins"]
       "tag:k8s-operator" : []
       "tag:k8s" : ["tag:k8s-operator"]
+      "tag:microk8s-master-init" : ["group:admins"]
+      "tag:microk8s-master" : ["group:admins"]
+      "tag:microk8s-worker" : []
     }
     ssh : [
       {
