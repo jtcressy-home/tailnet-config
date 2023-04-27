@@ -36,6 +36,6 @@ jobs:
         TAILSCALE_AUTHKEY: op://jtcressy-net-infra/tailscale-key-ghactions/password
 
     - name: Tailscale
-      uses: tailscale/github-action@ce41a99162202a647a4b24c30c558a567b926709
+      uses: tailscale/github-action@7bd8039bf25c23c4ab1b8d6e2cc2da2280601966
       with:
         authkey: ${{ env.TAILSCALE_AUTHKEY }}
