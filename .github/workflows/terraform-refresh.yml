@@ -21,7 +21,7 @@ jobs:
     needs:
     - terraform
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Create/Update Issue
       id: create-issue
       if: needs.terraform.outputs.plan-has-changes == 'true'
