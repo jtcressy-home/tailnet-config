@@ -6,7 +6,7 @@ terraform {
     }
     tailscale = {
       source  = "tailscale/tailscale"
-      version = "0.13.7"
+      version = "0.15.0"
     }
     github = {
       source  = "integrations/github"
