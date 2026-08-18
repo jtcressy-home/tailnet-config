@@ -25,13 +25,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Configure 1Password Connect
-      uses: 1password/load-secrets-action/configure@v1
+      uses: 1password/load-secrets-action/configure@v5
       with:
         connect-host: http://localhost:8080
         connect-token: ${{ secrets.OP_CONNECT_TOKEN }}
     
     - name: Load Tailscale Secrets
-      uses: 1password/load-secrets-action@v1.2.0
+      uses: 1password/load-secrets-action@v5.0.1
       env:
         TAILSCALE_AUTHKEY: op://jtcressy-net-infra/tailscale-key-ghactions/password
 
